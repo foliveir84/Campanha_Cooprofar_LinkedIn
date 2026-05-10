@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(python *)",
-      "Bash(Get-ChildItem *)"
+      "Bash(Get-ChildItem *)",
+      "Bash(dir C:\\\\Users\\\\filip\\\\Documents\\\\Python_Jobs\\\\Campanha_Cooprofar_LinkedIn *)",
+      "Bash(New-Item *)"
     ]
   }
 }

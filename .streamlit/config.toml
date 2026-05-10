@@ -1,0 +1,11 @@
+[server]
+# Enable static file serving for assets
+enableStaticServing = true
+
+[runner]
+# Allow running code that accesses file system
+magicEnabled = true
+
+# Specify the main entry point file
+# This tells Streamlit Cloud which file to run
+# The file should be at the project root

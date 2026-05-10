@@ -1,0 +1,148 @@
+
+[     UTC     ] Logs for campanhademo.streamlit.app/
+────────────────────────────────────────────────────────────────────────────────────────
+[20:36:19] 🚀 Starting up repository: 'campanha_cooprofar_linkedin', branch: 'main', main module: 'ui/app.py'
+[20:36:19] 🐙 Cloning repository...
+[20:36:20] 🐙 Cloning into '/mount/src/campanha_cooprofar_linkedin'...
+
+[20:36:20] 🐙 Cloned repository!
+[20:36:20] 🐙 Pulling code changes from Github...
+[20:36:21] 📦 Processing dependencies...
+
+──────────────────────────────────────── uv ───────────────────────────────────────────
+
+Using uv pip install.
+Using Python 3.13.13 environment at /home/adminuser/venv
+Resolved 47 packages in 425ms
+Prepared 47 packages in 1.63s
+Installed 47 packages in 113ms
+ + altair==6.1.0
+ + anyio==4.13.0
+ + attrs==26.1.0
+ + blinker==1.9.0
+ + cachetools==7.1.1
+ + certifi==2026.4.22
+ + charset-normalizer==3.4.7
+ + click==8.3.3
+ + colorama==0.4.6
+ + et-xmlfile==2.0.0
+ + gitdb==4.0.12
+ + gitpython==3.1.50
+ + h11==0.16.0
+ + httptools==0.7.1
+ + idna==3.13
+ + itsdangerous==2.2.0
+ + jinja2==3.1.6
+ + jsonschema==4.26.0
+ + jsonschema-specifications==2025.9.1
+ + markupsafe==3.0.3
+ + narwhals==2.20.0
+ + numpy==2.4.4
+ + openpyxl==3.1.5
+ + packaging==26.2
+ + pandas==3.0.2
+ + pillow==12.2.0
+ + protobuf==7.34.1
+ + pyarrow==24.0.0
+ + pydeck==0.9.2
+ + python-dateutil==2.9.0.post0
+ + python-multipart==0.0.27[2026-05-10 20:36:24.333107] 
+ + referencing==[2026-05-10 20:36:24.333533] 0.37.0
+ + requests==2.33.1
+ + rpds-py==0.30.0
+ + six==1.17.0
+ + smmap==5.0.3
+ + starlette==1.0.0
+ + streamlit==1.57.0
+ + tenacity==9.1.4
+ + toml==0.10.2
+ + typing-extensions==4.15.0
+ + tzdata==2026.2
+ + urllib3==2.6.3
+ + uvicorn==0.46.0
+ + watchdog==6.0.0
+ + websockets==16.0
+ + xlrd==2.0.2
+Checking if Streamlit is installed
+Found Streamlit version 1.57.0 in the environment
+Installing rich for an improved exception logging
+Using uv pip install.
+Using Python 3.13.13 environment at /home/adminuser/venv
+Resolved 4 packages in 123ms
+Prepared 4 packages in 114ms
+Installed 4 packages in 11ms
+ + markdown-it-py==4.2.0
+ + mdurl[2026-05-10 20:36:25.811576] ==0.1.2
+ + pygments==2.20.0
+ + rich==15.0.0
+
+────────────────────────────────────────────────────────────────────────────────────────
+
+[20:36:26] 🐍 Python dependencies were installed from /mount/src/campanha_cooprofar_linkedin/requirements.txt using uv.
+Check if streamlit is installed
+Streamlit is already installed
+[20:36:27] 📦 Processed dependencies!
+2026-05-10 20:36:29.602 Uvicorn server started on 0.0.0.0:8501
+
+
+
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:129 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:689 in code_to_exec                                     
+                                                                                
+  /mount/src/campanha_cooprofar_linkedin/ui/app.py:1 in <module>                
+                                                                                
+  ❱   1 from ui.theme import get_pharmacoach_css, get_logo_base64, render_head  
+      2 from core.extractor.infarmed_scraper import download_infarmed_dataset   
+      3 from core.parser.data_parser import clean_infarmed_dataset, parse_coop  
+      4 from core.engine.calculator import evaluate_cooprofar                   
+────────────────────────────────────────────────────────────────────────────────
+ModuleNotFoundError: No module named 'ui'
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:129 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:689 in code_to_exec                                     
+                                                                                
+  /mount/src/campanha_cooprofar_linkedin/ui/app.py:1 in <module>                
+                                                                                
+  ❱   1 from ui.theme import get_pharmacoach_css, get_logo_base64, render_head  
+      2 from core.extractor.infarmed_scraper import download_infarmed_dataset   
+      3 from core.parser.data_parser import clean_infarmed_dataset, parse_coop  
+      4 from core.engine.calculator import evaluate_cooprofar                   
+────────────────────────────────────────────────────────────────────────────────
+ModuleNotFoundError: No module named 'ui'
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:129 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:689 in code_to_exec                                     
+                                                                                
+  /mount/src/campanha_cooprofar_linkedin/ui/app.py:1 in <module>                
+                                                                                
+  ❱   1 from ui.theme import get_pharmacoach_css, get_logo_base64, render_head  
+      2 from core.extractor.infarmed_scraper import download_infarmed_dataset   
+      3 from core.parser.data_parser import clean_infarmed_dataset, parse_coop  
+      4 from core.engine.calculator import evaluate_cooprofar                   
+────────────────────────────────────────────────────────────────────────────────
+ModuleNotFoundError: No module named 'ui'
+────────────────────── Traceback (most recent call last) ───────────────────────
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/exec_code.py:129 in exec_func_with_error_handling                        
+                                                                                
+  /home/adminuser/venv/lib/python3.13/site-packages/streamlit/runtime/scriptru  
+  nner/script_runner.py:689 in code_to_exec                                     
+                                                                                
+  /mount/src/campanha_cooprofar_linkedin/ui/app.py:1 in <module>                
+                                                                                
+  ❱   1 from ui.theme import get_pharmacoach_css, get_logo_base64, render_head  
+      2 from core.extractor.infarmed_scraper import download_infarmed_dataset   
+      3 from core.parser.data_parser import clean_infarmed_dataset, parse_coop  
+      4 from core.engine.calculator import evaluate_cooprofar                   
+────────────────────────────────────────────────────────────────────────────────
+ModuleNotFoundError: No module named 'ui'

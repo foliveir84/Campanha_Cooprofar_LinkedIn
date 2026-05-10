@@ -7,11 +7,7 @@ import streamlit as st
 import io
 import pandas as pd
 import os
-import sys
 from pathlib import Path
-
-# Garante que a raiz do projeto está no PYTHONPATH para que importe 'core' com sucesso
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def to_excel_bytes(df: pd.DataFrame) -> bytes:
@@ -33,7 +29,7 @@ def load_cooprofar_conditions():
 
 def get_pharmacoach_logo_base64() -> str:
     """Load and encode Pharmacoach logo."""
-    logo_path = Path(__file__).parent.parent / "Logo_Pharmacoach.jpg"
+    logo_path = Path(__file__).parent / "Logo_Pharmacoach.jpg"
     return get_logo_base64(str(logo_path))
 
 
