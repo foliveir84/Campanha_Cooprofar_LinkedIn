@@ -175,7 +175,7 @@ pyrightconfig.json
 
 
 # Ficheiros Adicionais
-*.xslx
+*.xlsx
 *.xls
 
 # End of https://www.toptal.com/developers/gitignore/api/python
