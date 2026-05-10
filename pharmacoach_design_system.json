@@ -1,0 +1,111 @@
+{
+  "project": {
+    "name": "Pharmacoach",
+    "type": "brand_system_style",
+    "description": "Futuristic pharma-tech visual identity with neon glassmorphism aesthetics."
+  },
+  "visual_identity": {
+    "style": [
+      "glassmorphism",
+      "neo-futuristic",
+      "cyberpunk minimalism",
+      "3D glossy gradients",
+      "soft glow",
+      "premium dark UI"
+    ],
+    "mood": [
+      "innovative",
+      "clinical-tech",
+      "luxury",
+      "trustworthy",
+      "AI-driven",
+      "modern"
+    ]
+  },
+  "palette": {
+    "extracted_colors": [
+      "#19003b",
+      "#c431fb",
+      "#8038f0",
+      "#4121c7",
+      "#1f0258",
+      "#95b0fa"
+    ],
+    "primary_background": "#1a0036",
+    "primary_purple": "#8d3dff",
+    "primary_blue": "#4fa8ff",
+    "accent_magenta": "#ff4dff",
+    "soft_glow": "#b38cff",
+    "deep_shadow": "#120021"
+  },
+  "logo": {
+    "composition": {
+      "symbol": "Stylized letter P integrated with a pharmaceutical capsule",
+      "layout": "Centered icon above wordmark",
+      "icon_style": "Rounded geometric curves with inner glow",
+      "wordmark": "Bold rounded sans-serif"
+    },
+    "effects": {
+      "glow": true,
+      "gradient": true,
+      "3d_depth": true,
+      "shadow_blur": "soft",
+      "light_reflection": "subtle glossy reflections"
+    },
+    "gradients": [
+      {
+        "name": "primary_logo_gradient",
+        "colors": [
+          "#ff4dff",
+          "#8d3dff",
+          "#4fa8ff"
+        ],
+        "direction": "diagonal"
+      }
+    ]
+  },
+  "ui_system": {
+    "background": {
+      "type": "dark radial gradient",
+      "colors": [
+        "#120021",
+        "#1a0036",
+        "#220044"
+      ]
+    },
+    "cards": {
+      "style": "translucent glass panels",
+      "border_radius": "20px",
+      "blur": "16px",
+      "border": "1px solid rgba(255,255,255,0.08)"
+    },
+    "buttons": {
+      "shape": "rounded-pill",
+      "hover_effect": "outer neon glow",
+      "gradient": [
+        "#8d3dff",
+        "#4fa8ff"
+      ]
+    },
+    "typography": {
+      "primary_font_style": "modern rounded sans-serif",
+      "weight": "700",
+      "tracking": "-1%"
+    }
+  },
+  "lighting": {
+    "global_illumination": "soft neon bloom",
+    "highlight_intensity": "medium-high",
+    "ambient_light": "purple-blue"
+  },
+  "recommended_fonts": [
+    "Poppins",
+    "Sora",
+    "Outfit",
+    "Space Grotesk",
+    "Manrope"
+  ],
+  "prompt_template": {
+    "image_generation_prompt": "A futuristic pharma-tech brand identity in dark glassmorphism style with neon purple and blue gradients, glossy 3D logo, soft glow lighting, premium dark UI, centered composition, cinematic lighting, ultra-clean minimalism."
+  }
+}
