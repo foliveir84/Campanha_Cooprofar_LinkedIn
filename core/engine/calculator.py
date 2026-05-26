@@ -61,39 +61,57 @@ def calcular_pvf(pvp: float) -> float:
         
     return int(pvf * 100) / 100
 
-def evaluate_cooprofar(df_template: pd.DataFrame, df_infarmed: pd.DataFrame, discounts: dict) -> pd.DataFrame:
+def evaluate_cooprofar(df_template: pd.DataFrame, df_infarmed: pd.DataFrame, discounts: dict, rappel_percent: float = 0.0) -> pd.DataFrame:
     """
     Cruza o template da Cooprofar com o Infarmed, aplica os descontos por escalão,
+    aplica o desconto de Rappel (se > 0) sobre o Preço Compra Regular,
     e retorna apenas os produtos onde a campanha é matematicamente vantajosa.
     """
+    # --- Merge com Infarmed ---
     df_merged = df_infarmed.merge(df_template, left_on='Nº registo', right_on='CNP', suffixes=('_infarmed', '_template'))
     
+    # Mapear descontos
     discounts_clean = {int(k): float(v) for k, v in discounts.items()}
-    df_merged['Desconto_Percentual'] = df_merged['Escalao'].map(discounts_clean).fillna(0.0)
+    df_merged['Desconto_Escalao'] = df_merged['Escalao'].map(discounts_clean).fillna(0.0)
     
-    df_merged['Custo_Regular_Cooprofar'] = df_merged['PVF_template'] * (1 - (df_merged['Desconto_Percentual'] / 100))
-    df_merged['Custo_Regular_Cooprofar'] = df_merged['Custo_Regular_Cooprofar'].round(2)
+    # --- Cálculo Regular (escalão) ---
+    df_merged['Preco_Compra_Regular'] = df_merged['PVF_template'] * (1 - (df_merged['Desconto_Escalao'] / 100))
+    df_merged['Preco_Compra_Regular'] = df_merged['Preco_Compra_Regular'].round(2)
     
-    df_vantajosos = df_merged[df_merged['PVFCampanha'] < df_merged['Custo_Regular_Cooprofar']].copy()
+    # --- Cálculo Rappel ---
+    df_merged['Desconto_Rappel_EUR'] = (df_merged['Preco_Compra_Regular'] * (rappel_percent / 100)).round(2)
+    df_merged['Preco_Final_Rappel'] = (df_merged['Preco_Compra_Regular'] - df_merged['Desconto_Rappel_EUR']).round(2)
     
-    df_vantajosos['Diferenca_Absoluta'] = (df_vantajosos['Custo_Regular_Cooprofar'] - df_vantajosos['PVFCampanha']).round(2)
-    df_vantajosos['Diferenca_Percentual'] = ((df_vantajosos['Diferenca_Absoluta'] / df_vantajosos['Custo_Regular_Cooprofar']) * 100).round(2)
+    # --- Filtro de Vantagem (baseline é Preco_Final_Rappel) ---
+    df_vantajosos = df_merged[df_merged['PVFCampanha'] < df_merged['Preco_Final_Rappel']].copy()
     
-    # 7. Organizar e renomear colunas finais conforme PRD
+    # --- Diferenças calculadas sobre o Preco_Final_Rappel ---
+    df_vantajosos['Diferenca_Absoluta'] = (df_vantajosos['Preco_Final_Rappel'] - df_vantajosos['PVFCampanha']).round(2)
+    df_vantajosos['Diferenca_Percentual'] = ((df_vantajosos['Diferenca_Absoluta'] / df_vantajosos['Preco_Final_Rappel']) * 100).round(2)
+    
+    # --- Renomear e ordenar colunas finais ---
     df_vantajosos['CNP'] = df_vantajosos['CNP'].astype(str)
     
     colunas_finais = {
         'CNP': 'CNP', 
         'Designacao_template': 'Designacao', 
-        'Custo_Regular_Cooprofar': 'Preco_Compra_Regular', 
+        'Preco_Compra_Regular': 'Preco_Compra_Regular',
+        'Desconto_Rappel_EUR': 'Desconto_Rappel_EUR',
+        'Preco_Final_Rappel': 'Preco_Final_Rappel',
         'PVFCampanha': 'Preco_Campanha', 
         'Diferenca_Absoluta': 'Diferenca_Absoluta', 
-        'Diferenca_Percentual': 'Diferenca_Percentual'
+        'Diferenca_Percentual': 'Diferenca_Percentual',
+        'PVF_template': 'PVF',
+        'Escalao': 'Escalao',
+        'Desconto_Escalao': 'Desconto_Escalao',
+        'Preço (PVP)': 'Preço (PVP)'
     }
     
-    # Adiciono colunas extra uteis que já estavam, mas padronizadas
     df_finais = df_vantajosos.rename(columns=colunas_finais)
-    col_ordem = ['CNP', 'Designacao', 'Preco_Compra_Regular', 'Preco_Campanha', 'Diferenca_Absoluta', 'Diferenca_Percentual', 'Preço (PVP)', 'Escalao', 'Desconto_Percentual', 'PVF_template']
+    col_ordem = ['CNP', 'Designacao', 'PVF', 'Escalao', 'Desconto_Escalao', 
+                 'Preco_Compra_Regular', 'Desconto_Rappel_EUR', 'Preco_Final_Rappel',
+                 'Preco_Campanha', 'Diferenca_Absoluta', 'Diferenca_Percentual', 
+                 'Preço (PVP)']
     
     return df_finais[col_ordem].sort_values(by='Diferenca_Absoluta', ascending=False)
 

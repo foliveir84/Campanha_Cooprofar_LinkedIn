@@ -1,3 +1,14 @@
+[global]
+darkTheme = true
+
+[theme]
+base = "dark"
+primaryColor = "#8d3dff"
+backgroundColor = "#1a0036"
+secondaryBackgroundColor = "#120021"
+textColor = "#e0e0e0"
+font = "sans serif"
+
 [server]
 # Enable static file serving for assets
 enableStaticServing = true
