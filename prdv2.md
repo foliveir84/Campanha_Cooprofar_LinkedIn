@@ -1,6 +1,6 @@
 # 1. Visão e Objectivos
 
-O sistema é um motor de análise de rentabilidade farmacêutica que determina deterministicamente se a aquisição de um medicamento deve ocorrer via modelo de Campanha Grossista (indexado ao Preço de Venda ao Armazém - PVA + Fee) ou via modelo de Compra Regular (indexado ao Preço de Venda à Farmácia - PVF + Desconto Comercial).
+O sistema é um motor de análise de rentabilidade farmacêutica que determina deterministicamente se a aquisição de um medicamento deve ocorrer via modelo de Campanha Grossista (indexado ao Preço de Venda ao Armazém - PVA + Fee) ou via modelo de Compra Regular (indexado ao Preço de Venda à Farmácia - PVF + Desconto Comercial, incluindo opcionalmente um Desconto de Rappel).
 
 ### Exclusões Explícitas
 Para garantir o isolamento do domínio, este sistema **NÃO**:
@@ -23,8 +23,9 @@ Para garantir o isolamento do domínio, este sistema **NÃO**:
 2. O utilizador efetua upload do *template* de Campanha Cooprofar.
 3. O sistema cruza os produtos com o ficheiro Infarmed para obter o PVP e calcular o Escalão correspondente.
 4. A partir do PVF (presente no *template*), aplica o desconto correspondente ao Escalão da configuração Cooprofar.
-5. O sistema compara diretamente este PVF com desconto face ao Preço de Campanha (PVFCampanha).
-6. São apresentados (e disponibilizados para exportação) apenas os produtos mais vantajosos na campanha (PVFCampanha < PVF com desconto).
+5. Se o utilizador tiver definido um valor de Rappel > 0%, este é aplicado ao Preço de Compra Regular (ver Passo 5.3 e 5.5).
+6. O sistema compara o **Preço Final Rappel** (ou o Preço Compra Regular, se rappel for 0) face ao Preço de Campanha (PVFCampanha).
+7. São apresentados (e disponibilizados para exportação) apenas os produtos mais vantajosos na campanha (PVFCampanha < Preço Final de Comparação).
 
 **Fluxo de Finalização**
 1. O utilizador invoca a ação de "Exportar".
@@ -68,10 +69,12 @@ O *dataset* em bruto passa obrigatoriamente por `tratar_ficheiro_infarmed.py`, o
 **Schema Output (Matriz de Rentabilidade)**
 *   `CNP` (String): Forçado estritamente a formato de texto para evitar formatações numéricas nos ERPs aquando da exportação.
 *   `Designacao` (String): Extraída unicamente a partir dos templates (formato Inicial Maiúscula), ignorando o nome oficial proveniente do Infarmed.
-*   `Preco_Compra_Regular` (Float, Formato €. 2 casas decimais) - Corresponde ao PVF com desconto.
+*   `Preco_Compra_Regular` (Float, Formato €. 2 casas decimais): Corresponde ao PVF com desconto do escalão.
+*   `Desconto_Rappel_EUR` (Float, Formato €. 2 casas decimais): Valor absoluto do desconto de rappel aplicado ao Preço Compra Regular.
+*   `Preco_Final_Rappel` (Float, Formato €. 2 casas decimais): **Preço líquido final após aplicar o rappel ao Preço Compra Regular.** Este é o novo baseline de comparação com o Preço de Campanha.
 *   `Preco_Campanha` (Float, Formato €. 2 casas decimais).
-*   `Diferenca_Absoluta` (Float, Regular - Campanha. 2 casas decimais).
-*   `Diferenca_Percentual` (Float, Diferenca_Absoluta / Preco_Compra_Regular * 100. Formato %).
+*   `Diferenca_Absoluta` (Float, `Preco_Final_Rappel` - `Preco_Campanha`. 2 casas decimais).
+*   `Diferenca_Percentual` (Float, `Diferenca_Absoluta / Preco_Final_Rappel * 100`. Formato %).
 
 # 5. Lógica de Negócio Core (O Motor)
 
@@ -88,16 +91,27 @@ A matriz de escalões é calculada pelo *boundary* superior estrito (inclusive):
 As rotinas matemáticas base encontram-se segregadas.
 **Regra Crítica de Arredondamento (Truncatura)**: O processamento no `tratar_ficheiro_infarmed.py` determina que, ao derivar o PVA e o PVF a partir do PVP, os valores **não sofrem arredondamento tradicional (round)**. São estritamente truncados à 2ª casa decimal: `int(valor * 100) / 100`.
 
-### Passo 5.3: Configuração de Descontos Cooprofar
+### Passo 5.3: Configuração de Descontos Cooprofar e Rappel
 O sistema carrega os descontos por escalão ($D_E$) a partir do ficheiro `condicoes_cooprofar.json` (Ex: Escalão 1 -> 8.3%). Este mapeamento serve de referencial para o "Preço de Compra Regular".
 $$ Custo\_Regular\_Cooprofar = PVF \times (1 - (D_E / 100)) $$
 
-### Passo 5.4: Motor de Decisão (Filtro de Vantagem)
+Adicionalmente, o sistema permite configurar um **Desconto de Rappel** ($R$) via Sidebar, com valor default `0.0%` e limite máximo **estrito de 1%**.
+
+### Passo 5.4: Aplicação do Desconto de Rappel
+O rappel incide sobre o **Preço Compra Regular** (o valor já com desconto do escalão), e nunca sobre o PVF bruto.
+$$ Desconto\_Rappel\_EUR = round(Custo\_Regular\_Cooprofar \times (R / 100), 2) $$
+$$ Preco\_Final\_Rappel = round(Custo\_Regular\_Cooprofar - Desconto\_Rappel\_EUR, 2) $$
+
+Equivalentemente:
+$$ Preco\_Final\_Rappel = round(Custo\_Regular\_Cooprofar \times (1 - (R / 100)), 2) $$
+
+### Passo 5.5: Motor de Decisão (Filtro de Vantagem)
 
 **Motor Cooprofar:**
 1. Determina-se o Escalão $E$ via PVP do Infarmed.
-2. Aplica-se o desconto $D_E$ configurado ao PVF (presente no template).
-**Aprovação (Vantajoso):** $PVFCampanha < Custo\_Regular\_Cooprofar$
+2. Aplica-se o desconto $D_E$ configurado ao PVF (presente no template), obtendo o `Custo_Regular_Cooprofar`.
+3. Se $R > 0$, aplica-se o rappel ao `Custo_Regular_Cooprofar`, resultando no `Preco_Final_Rappel`.
+4. **Aprovação (Vantajoso):** $PVFCampanha < Preco\_Final\_Rappel$
 
 # 6. Interfaces, Inputs e Outputs
 
@@ -118,6 +132,7 @@ $$ Custo\_Regular\_Cooprofar = PVF \times (1 - (D_E / 100)) $$
 
 ### Painel Paramétrico (Sidebar UI)
 *   `Tabela_Descontos_Escalao`: Carregada por defeito a partir de `condicoes_cooprofar.json`. Apresentada como campos de edição num formulário na *Sidebar* para permitir alterações on-the-fly pelo utilizador.
+*   `Rappel_Percent`: Campo numérico adicional na *Sidebar* (após os descontos por escalão), com default `0.0`, step `0.1` e validação de limite máximo de `1.0`. Exibe `st.sidebar.warning()` se o valor exceder 1%.
 
 ### Exportação Final
 Ficheiro serializado através do `openpyxl` subjacente do Pandas via `DataFrame.to_excel(index=False)`. Ficheiro deve possuir extensão `.xlsx`. As células não são auto-formatadas visualmente (cores), mantendo a estrita legibilidade de dados para importação em ERPs sequenciais, cumprindo com formato nativo bruto, excepto o cabeçalho fixo estipulado na secção 4.
@@ -135,3 +150,6 @@ Ficheiro serializado através do `openpyxl` subjacente do Pandas via `DataFrame.
 
 **ADR 004: Identidade Visual Pharmacoach (Glassmorphism)**
 *   **Porquê:** A marca Pharmacoach exige uma identidade visual distintiva (glassmorphism, neon gradients, dark UI premium) que comunica inovação e confiança no setor farmacêutico. O CSS é injetado dinamicamente para permitir evolução da marca sem refatoração do core.
+
+**ADR 005: Rappel como Parâmetro de Sessão Dinâmico**
+*   **Porquê:** O desconto de rappel é um instrumento promocional temporário e volátil (muda de campanha para campanha). Ao não persisti-lo em ficheiros de configuração e mantê-lo exclusivamente em `st.session_state` editável via Sidebar, evita-se poluição de configurações fixas com variáveis transitórias, mantendo a flexibilidade operacional totalmente no UI.

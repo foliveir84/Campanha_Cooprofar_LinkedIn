@@ -24,6 +24,11 @@ O PharmLogix é um software construído em Python, focado numa implementação l
     *   `openpyxl` (Para Leitura e Escrita nativa em formato Excel)
     *   `requests` e `beautifulsoup4` (Para o *Scraping* do site do Infarmed)
 
+## 2.1. Funcionalidades Principais
+*   **Análise Cooprofar**: Cruza templates de campanha com a base Infarmed, aplicando descontos por escalão e um **Desconto de Rappel** opcional (máx. 1%).
+*   **Comparação Financeira**: Determina em fração de segundos se o `Preço de Campanha` é inferior ao `Preço Final de Compra` (incluindo rappel).
+*   **Exportação Detalhada**: Gera Excel com colunas de preço intermédio, desconto de rappel, preço final, diferenças absolutas e percentuais.
+
 ## 3. Instalação e Setup (Passo-a-Passo)
 
 Este guia destina-se a garantir que consegue colocar a aplicação a funcionar em poucos minutos.
