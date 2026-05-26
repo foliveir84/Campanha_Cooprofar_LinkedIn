@@ -132,7 +132,7 @@ $$ Preco\_Final\_Rappel = round(Custo\_Regular\_Cooprofar \times (1 - (R / 100))
 
 ### Painel Paramétrico (Sidebar UI)
 *   `Tabela_Descontos_Escalao`: Carregada por defeito a partir de `condicoes_cooprofar.json`. Apresentada como campos de edição num formulário na *Sidebar* para permitir alterações on-the-fly pelo utilizador.
-*   `Rappel_Percent`: Campo numérico adicional na *Sidebar* (após os descontos por escalão), com default `0.0`, step `0.1` e validação de limite máximo de `1.0`. Exibe `st.sidebar.warning()` se o valor exceder 1%.
+*   `Rappel_Percent`: Campo numérico adicional na *Sidebar* (após os descontos por escalão), com default `0.0`, step `0.1` e validação de limite máximo de `1.0`. Não exibe warning pois o `max_value` bloqueia input > 1% nativamente.
 
 ### Exportação Final
 Ficheiro serializado através do `openpyxl` subjacente do Pandas via `DataFrame.to_excel(index=False)`. Ficheiro deve possuir extensão `.xlsx`. As células não são auto-formatadas visualmente (cores), mantendo a estrita legibilidade de dados para importação em ERPs sequenciais, cumprindo com formato nativo bruto, excepto o cabeçalho fixo estipulado na secção 4.

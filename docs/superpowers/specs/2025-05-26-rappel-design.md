@@ -35,20 +35,25 @@ Para PVF = 10.00€, Escalão 1 (Desconto = 8.3%):
 
 Após o bloco dos 6 descontos por escalão, adiciona-se um separador visual e o campo:
 
+**Nota de layout:** O bloco de Rappel é colocado **antes** da secção LinkedIn na sidebar, de modo a evitar overlap com elementos de posição fixa/sticky. O CSS da secção LinkedIn foi alterado de `position: fixed` para `position: sticky` dentro do fluxo da sidebar.
+
 ```python
-st.sidebar.markdown("---")
-st.sidebar.subheader("Rappel (%) - Máximo 1%")
+st.sidebar.markdown("<hr style='border-top: 1px solid #555; margin: 1rem 0;'>", unsafe_allow_html=True)
+st.sidebar.subheader("Desconto de Rappel (%)")
 if 'rappel_percent' not in st.session_state:
     st.session_state['rappel_percent'] = 0.0
 rappel = st.sidebar.number_input(
     "Rappel (%)",
     value=float(st.session_state['rappel_percent']),
+    min_value=0.0,
+    max_value=1.0,
     step=0.1,
     format="%.2f"
+)
 st.session_state['rappel_percent'] = rappel
-if rappel > 1.0:
-    st.sidebar.warning("⚠️ O Rappel não pode exceder 1%.")
 ```
+
+A validação do limite é feita nativamente por `max_value=1.0`, eliminando a necessidade de warning manual.
 
 ---
 
