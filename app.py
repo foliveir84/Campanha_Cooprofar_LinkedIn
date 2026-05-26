@@ -106,9 +106,6 @@ def main():
     )
     st.session_state['rappel_percent'] = rappel_input
 
-    if rappel_input > 1.0:
-        st.sidebar.warning("⚠️ O Rappel não pode exceder 1%.")
-
     # LinkedIn Section
     st.sidebar.markdown(render_linkedin_sidebar(), unsafe_allow_html=True)
 
