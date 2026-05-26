@@ -99,6 +99,7 @@ def main():
         "Rappel (%)",
         value=float(st.session_state['rappel_percent']),
         min_value=0.0,
+        max_value=1.0,
         step=0.1,
         format="%.2f",
         key="rappel_input_key"
