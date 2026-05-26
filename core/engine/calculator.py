@@ -75,7 +75,7 @@ def evaluate_cooprofar(df_template: pd.DataFrame, df_infarmed: pd.DataFrame, dis
     df_merged['Desconto_Escalao'] = df_merged['Escalao'].map(discounts_clean).fillna(0.0)
     
     # --- Cálculo Regular (escalão) ---
-    df_merged['Preco_Compra_Regular'] = df_merged['PVF'] * (1 - (df_merged['Desconto_Escalao'] / 100))
+    df_merged['Preco_Compra_Regular'] = df_merged['PVF_template'] * (1 - (df_merged['Desconto_Escalao'] / 100))
     df_merged['Preco_Compra_Regular'] = df_merged['Preco_Compra_Regular'].round(2)
     
     # --- Cálculo Rappel ---
@@ -101,7 +101,7 @@ def evaluate_cooprofar(df_template: pd.DataFrame, df_infarmed: pd.DataFrame, dis
         'PVFCampanha': 'Preco_Campanha', 
         'Diferenca_Absoluta': 'Diferenca_Absoluta', 
         'Diferenca_Percentual': 'Diferenca_Percentual',
-        'PVF': 'PVF',
+        'PVF_template': 'PVF',
         'Escalao': 'Escalao',
         'Desconto_Escalao': 'Desconto_Escalao',
         'Preço (PVP)': 'Preço (PVP)'

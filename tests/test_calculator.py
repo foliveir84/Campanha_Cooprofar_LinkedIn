@@ -14,7 +14,8 @@ def sample_data():
     df_infarmed = pd.DataFrame({
         'Nº registo': [1234567],
         'Preço (PVP)': [6.68],
-        'Escalao': [1]
+        'Escalao': [1],
+        'PVF': [0.0]  # dummy para garantir colisão e suffixo _template no merge
     })
     discounts = {1: 8.3}
     return df_template_base, df_infarmed, discounts
