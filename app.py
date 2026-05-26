@@ -88,6 +88,26 @@ def main():
         )
         st.session_state['discounts'][key] = new_val
 
+    # Separador e Rappel
+    st.sidebar.markdown("<hr style='border-top: 1px solid #555; margin: 1rem 0;'>", unsafe_allow_html=True)
+    st.sidebar.subheader("Desconto de Rappel (%)")
+
+    if 'rappel_percent' not in st.session_state:
+        st.session_state['rappel_percent'] = 0.0
+
+    rappel_input = st.sidebar.number_input(
+        "Rappel (%)",
+        value=float(st.session_state['rappel_percent']),
+        min_value=0.0,
+        step=0.1,
+        format="%.2f",
+        key="rappel_input_key"
+    )
+    st.session_state['rappel_percent'] = rappel_input
+
+    if rappel_input > 1.0:
+        st.sidebar.warning("⚠️ O Rappel não pode exceder 1%.")
+
     # LinkedIn Section
     st.sidebar.markdown(render_linkedin_sidebar(), unsafe_allow_html=True)
 
@@ -102,7 +122,8 @@ def main():
                 df_result_coop = evaluate_cooprofar(
                     df_template_coop,
                     st.session_state['df_infarmed'],
-                    st.session_state['discounts']
+                    st.session_state['discounts'],
+                    rappel_percent=st.session_state['rappel_percent']
                 )
                 st.dataframe(df_result_coop, width='stretch', hide_index=True)
 
