@@ -8,6 +8,7 @@ import io
 import pandas as pd
 import os
 from pathlib import Path
+# Teste
 
 
 def to_excel_bytes(df: pd.DataFrame) -> bytes:
@@ -89,7 +90,8 @@ def main():
         st.session_state['discounts'][key] = new_val
 
     # Separador e Rappel
-    st.sidebar.markdown("<hr style='border-top: 1px solid #555; margin: 1rem 0;'>", unsafe_allow_html=True)
+    st.sidebar.markdown(
+        "<hr style='border-top: 1px solid #555; margin: 1rem 0;'>", unsafe_allow_html=True)
     st.sidebar.subheader("Desconto de Rappel (%)")
 
     if 'rappel_percent' not in st.session_state:
