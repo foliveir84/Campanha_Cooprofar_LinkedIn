@@ -19,9 +19,24 @@ def get_pharmacoach_css() -> str:
     """Return complete CSS theme for Pharmacoach brand."""
     return """
     <style>
-    /* Global Background */
+    /* === GLOBAL OVERRIDE: Força tema escuro Pharmacoach em QUALQUER tema Streamlit === */
+    .stApp,
+    .stApp * {
+        background: transparent !important;
+    }
+
     .stApp {
-        background: linear-gradient(135deg, #120021 0%, #1a0036 50%, #220044 100%);
+        background: linear-gradient(135deg, #120021 0%, #1a0036 50%, #220044 100%) !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Título da sidebar (Streamlit nativo) */
+    section[data-testid="stSidebar"] [data-testid="stSidebarNav"] {
+        color: #e0e0e0 !important;
+    }
+
+    section[data-testid="stSidebar"] .stMarkdown {
+        color: #e0e0e0 !important;
     }
 
     /* Header Container */
@@ -67,13 +82,13 @@ def get_pharmacoach_css() -> str:
 
     /* LinkedIn Section in Sidebar */
     .linkedin-section {
-        position: fixed;
-        bottom: 20px;
-        left: 20px;
+        position: sticky;
+        bottom: 0;
         text-align: center;
         padding: 15px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
-        width: calc(300px - 40px);
+        background: linear-gradient(180deg, #1a0036 0%, #120021 100%);
+        z-index: 10;
     }
 
     .linkedin-logo {
